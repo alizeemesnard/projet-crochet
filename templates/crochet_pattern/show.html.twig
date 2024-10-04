@@ -1,0 +1,43 @@
+{# ... #} 
+{% block title %} Patron de crochet n°{{crochetPattern.id}}{% endblock %}
+
+{% block body %}
+    <h1>{{ crochetPattern.Name }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Taille du crochet</th>
+                <td>{{ crochetPattern.hookSize }}</td>
+            </tr>
+            <tr>
+                <th>Catégorie</th>
+                <td>{{ crochetPattern.category }}</td>
+            </tr>
+            <tr>
+                <th>Langue</th>
+                <td>{{ crochetPattern.language }}</td>
+            </tr>
+            <tr>
+                <th>Designer</th>
+                <td>{{ crochetPattern.designer }}</td>
+            </tr>
+            <tr>
+                <th>Images</th>
+                <td>
+                    <ul>
+                        {% for image in crochetPattern.image %}
+                            <li><img src="{{ asset(image) }}" alt="Image de patron" style="max-width: 100px;"/></li>
+                        {% else %}
+                            <li>Aucune image disponible</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <a href="{{ path('app_pattern_collection_show', {'id': crochetPattern.collection.id}) }}">Retour à la collection de patrons</a>
+    
+{% endblock %} {# body #} 
+{# ... #}

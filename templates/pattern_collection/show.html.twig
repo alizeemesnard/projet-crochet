@@ -1,0 +1,36 @@
+{# ... #} 
+{% block title %} Collection de patrons n°{{ patternCollection.id }}{% endblock %}
+
+  {% block body %}
+      <h1>{{ patternCollection.Name }}</h1>
+
+      <table class="table">
+          <tbody>
+            <tr>
+                <th>Designer</th>
+                <td>{{ patternCollection.designer }}</td>
+            </tr>
+            <tr>
+                <th>Date Created</th>
+                <td>{{ patternCollection.dateCreated ? patternCollection.dateCreated|date('Y-m-d') : 'N/A' }}</td>
+            </tr>
+            <tr>
+				<th>Patrons</th>
+                <td>
+                    <ul>
+                        {% for pattern in patternCollection.patterns %}
+                            <li>
+   						   <a href="{{ path('app_crochet_pattern_show', {'id': pattern.id}) }}">{{ pattern }}</a> </li>
+                        {% else %}
+                            <li> Aucun patron dans cette collection</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+          </tbody>
+      </table>
+
+      <a href="{{'list' }}">Retour à la liste des collections</a>
+
+  {% endblock %} {# body #} 
+{# ... #}
