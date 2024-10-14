@@ -23,7 +23,7 @@ class CrochetPatternController extends AbstractController
      *
      * @param int $id
      *
-     * AVEC TWIG
+     * Dans cette partie, j'utilise twig.
      */
     
     #[Route('/crochet/pattern/{id}', name: 'app_crochet_pattern_show', requirements: ['id' => '\d+'], methods: ['GET'])]

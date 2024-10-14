@@ -1,4 +1,6 @@
-{# ... #} 
+{% extends 'base.html.twig' %}
+
+
 {% block title %} Patron de crochet n°{{crochetPattern.id}}{% endblock %}
 
 {% block body %}
@@ -27,9 +29,9 @@
                 <td>
                     <ul>
                         {% for image in crochetPattern.image %}
-                            <li><img src="{{ asset(image) }}" alt="Image de patron" style="max-width: 100px;"/></li>
+                            <div><img src="{{ asset(image) }}" alt="Image de patron" style="max-width: 100px;"/></div>
                         {% else %}
-                            <li>Aucune image disponible</li>
+                            <div>Aucune image disponible</div>
                         {% endfor %}
                     </ul>
                 </td>
@@ -37,7 +39,7 @@
         </tbody>
     </table>
     
-    <a href="{{ path('app_pattern_collection_show', {'id': crochetPattern.collection.id}) }}">Retour à la collection de patrons</a>
+    <a href="{{ path('app_pattern_collection_show', {'id': crochetPattern.patternCollection.id}) }}">Retour à la collection de patrons</a>
     
 {% endblock %} {# body #} 
 {# ... #}

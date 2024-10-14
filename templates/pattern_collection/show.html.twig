@@ -1,4 +1,5 @@
-{# ... #} 
+{% extends 'base.html.twig' %}
+
 {% block title %} Collection de patrons n°{{ patternCollection.id }}{% endblock %}
 
   {% block body %}
@@ -7,11 +8,11 @@
       <table class="table">
           <tbody>
             <tr>
-                <th>Designer</th>
+                <th>Créateur</th>
                 <td>{{ patternCollection.designer }}</td>
             </tr>
             <tr>
-                <th>Date Created</th>
+                <th>Date</th>
                 <td>{{ patternCollection.dateCreated ? patternCollection.dateCreated|date('Y-m-d') : 'N/A' }}</td>
             </tr>
             <tr>
@@ -22,7 +23,7 @@
                             <li>
    						   <a href="{{ path('app_crochet_pattern_show', {'id': pattern.id}) }}">{{ pattern }}</a> </li>
                         {% else %}
-                            <li> Aucun patron dans cette collection</li>
+                            <li> Aucun patron dans cette collection ! </li>
                         {% endfor %}
                     </ul>
                 </td>
@@ -30,7 +31,7 @@
           </tbody>
       </table>
 
-      <a href="{{'list' }}">Retour à la liste des collections</a>
+      <a href="{{ path('app_pattern_collection_list') }}">Retour à la liste des collections</a>
 
   {% endblock %} {# body #} 
 {# ... #}

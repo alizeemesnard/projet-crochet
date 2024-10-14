@@ -1,0 +1,7 @@
+bootstrap_menu:
+  menus:
+    main:
+      items:
+        collections:
+          label: 'Liste des collections'
+          route: 'app_pattern_collection_list'

@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\PatternCollectionRepository;
+use App\Repository\patternCollectionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity(repositoryClass: PatternCollectionRepository::class)]
-class PatternCollection
+#[ORM\Entity(repositoryClass: patternCollectionRepository::class)]
+class patternCollection
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +28,7 @@ class PatternCollection
     #[ORM\Column(length: 255)]
     private ?string $Name = null;
 
-    #[ORM\OneToMany(mappedBy: 'collection', targetEntity: CrochetPattern::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'patternCollection', targetEntity: CrochetPattern::class, cascade: ['persist', 'remove'])]
     private Collection $patterns;
     
     public function __construct()

@@ -33,7 +33,7 @@ class CrochetPattern
     private ?string $Designer = null;
 
     #[ORM\ManyToOne(inversedBy: 'patterns')]
-    private ?PatternCollection $collection = null;
+    private ?patternCollection $patternCollection = null;
     
     
     public function getId(): ?int
@@ -113,14 +113,14 @@ class CrochetPattern
         return $this;
     }
     
-    public function getCollection(): ?PatternCollection
+    public function getPatternCollection(): ?patternCollection
     {
-        return $this->collection;
+        return $this->patternCollection;
     }
     
-    public function setCollection(?PatternCollection $collection): static
+    public function setPatternCollection(?patternCollection $patternCollection): static
     {
-        $this->collection = $collection;
+        $this->patternCollection = $patternCollection;
         
         return $this;
     }
