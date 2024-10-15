@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CrochetPatternRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,17 @@ class CrochetPattern
 
     #[ORM\ManyToOne(inversedBy: 'patterns')]
     private ?patternCollection $patternCollection = null;
+
+    /**
+     * @var Collection<int, Portfolio>
+     */
+    #[ORM\ManyToMany(targetEntity: Portfolio::class, mappedBy: 'patterns')]
+    private Collection $portfolios;
+
+    public function __construct()
+    {
+        $this->portfolios = new ArrayCollection();
+    }
     
     
     public function getId(): ?int
@@ -128,5 +141,32 @@ class CrochetPattern
     public function __toString(): string
     {
         return $this->Name;
+    }
+
+    /**
+     * @return Collection<int, Portfolio>
+     */
+    public function getPortfolios(): Collection
+    {
+        return $this->portfolios;
+    }
+
+    public function addPortfolio(Portfolio $portfolio): static
+    {
+        if (!$this->portfolios->contains($portfolio)) {
+            $this->portfolios->add($portfolio);
+            $portfolio->addPattern($this);
+        }
+
+        return $this;
+    }
+
+    public function removePortfolio(Portfolio $portfolio): static
+    {
+        if ($this->portfolios->removeElement($portfolio)) {
+            $portfolio->removePattern($this);
+        }
+
+        return $this;
     }
 }

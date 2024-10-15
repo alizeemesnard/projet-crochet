@@ -34,6 +34,9 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?patternCollection $patternCollection = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Member')]
+    private ?Portfolio $Portfolios = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,6 +120,18 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPatternCollection(?patternCollection $patternCollection): static
     {
         $this->patternCollection = $patternCollection;
+
+        return $this;
+    }
+
+    public function getPortfolios(): ?Portfolio
+    {
+        return $this->Portfolios;
+    }
+
+    public function setPortfolios(?Portfolio $Portfolios): static
+    {
+        $this->Portfolios = $Portfolios;
 
         return $this;
     }

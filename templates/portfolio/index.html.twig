@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portfolio index{% endblock %}
+
+{% block body %}
+    <h1>Portfolio index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Créateur</th>
+                <th>Date de création</th>
+                <th>Nombre de Patrons</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for portfolio in portfolios %}
+            <tr>
+                <td>{{ portfolio.id }}</td>
+                <td>{{ portfolio.name }}</td>
+                <td>{{ portfolio.designer }}</td>
+                <td>{{ portfolio.dateCreated ? portfolio.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ portfolio.totalPatterns }}</td>
+                <td>
+                    <a href="{{ path('app_portfolio_show', {'id': portfolio.id}) }}">show</a>
+                    <a href="{{ path('app_portfolio_edit', {'id': portfolio.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_portfolio_new') }}">Créez un nouveau portfolio</a>
+{% endblock %}

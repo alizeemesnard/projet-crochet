@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portfolio{% endblock %}
+
+{% block body %}
+    <h1>Portfolio</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ portfolio.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ portfolio.name }}</td>
+            </tr>
+            <tr>
+                <th>Créateur</th>
+                <td>{{ portfolio.designer }}</td>
+            </tr>
+            <tr>
+                <th>Date de création</th>
+                <td>{{ portfolio.dateCreated ? portfolio.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nombre total de patrons</th>
+                <td>{{ portfolio.totalPatterns }}</td>
+            </tr>
+            <tr>
+				<th>Patrons</th>
+                <td>
+                    <ul>
+                        {% for pattern in patternCollection.patterns %}
+                            <li>
+   						   <a href="{{ path('app_crochet_pattern_show', {'id': pattern.id}) }}">{{ pattern }}</a> </li>
+                        {% else %}
+                            <li> Aucun patron dans ce portfolio ! </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_portfolio_index') }}">retour à la liste</a>
+
+    <a href="{{ path('app_portfolio_edit', {'id': portfolio.id}) }}">éditez</a>
+
+    {{ include('portfolio/_delete_form.html.twig') }}
+{% endblock %}

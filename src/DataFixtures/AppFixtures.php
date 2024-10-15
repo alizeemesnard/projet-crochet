@@ -7,6 +7,7 @@ use App\Entity\CrochetPattern;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Member;
 
 
 class AppFixtures extends Fixture
@@ -25,12 +26,6 @@ class AppFixtures extends Fixture
     private const COLLECTION_MONSTRES = 'collection-monstres-rigolos';
     private const COLLECTION_DECORATIONS_NOEL = 'collection-decorations-de-noel';
     
-
-    public function load(ObjectManager $manager)
-    {
-        $this->loadPatternCollections($manager);
-        $this->loadCrochetPatterns($manager);
-    }
 
     /**
      * Charge les collections.
@@ -102,9 +97,9 @@ class AppFixtures extends Fixture
             
             $manager->persist($crochetPattern);
             $manager->flush();
-            
         }
-    }
+     }
+
     
         /**
          * Données de CrochetPatterns.
@@ -135,7 +130,7 @@ class AppFixtures extends Fixture
     }
     
     /**
-     * Hasher de mots de passe
+     * Hasher de mots de passe pour les membres.
      */
     
     
@@ -146,7 +141,37 @@ class AppFixtures extends Fixture
         $this->hasher = $hasher;
     }
     
+    /**
+     * Génère des données pour la création des membres:
+     *      [email, plain text password]
+     * @return \\Generator
+     */
     
-    
+    private function membersGenerator()
+    {
+        yield ['alizee@localhost','123456'];
+        yield ['zelia@localhost','123456'];
+    }
+
+    public function load(ObjectManager $manager): void
+    {
+        $this->loadPatternCollections($manager);
+        $this->loadCrochetPatterns($manager);
+        
+        foreach ($this->membersGenerator() as [$email, $plainPassword]) {
+            $user = new Member();
+            $password = $this->hasher->hashPassword($user, $plainPassword);
+            $user->setEmail($email);
+            $user->setPassword($password);
+            
+            // compléter ultérieurement:
+            // $roles = array();
+            // $roles[] = $role;
+            // $user->setRoles($roles);
+            
+            $manager->persist($user);
+        }
+        $manager->flush();
+    }
     
 }
