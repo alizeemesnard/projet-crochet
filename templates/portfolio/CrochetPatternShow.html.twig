@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %} Patron de crochet n°{{crochetPattern.id}}{% endblock %}
+
+{% block body %}
+    <h1>{{ crochetPattern.Name }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Taille du crochet</th>
+                <td>{{ crochetPattern.hookSize }}</td>
+            </tr>
+            <tr>
+                <th>Catégorie</th>
+                <td>{{ crochetPattern.category }}</td>
+            </tr>
+            <tr>
+                <th>Langue</th>
+                <td>{{ crochetPattern.language }}</td>
+            </tr>
+            <tr>
+                <th>Designer</th>
+                <td>{{ crochetPattern.designer }}</td>
+            </tr>
+            <tr>
+                <th>Images</th>
+                <td>
+                    <ul>
+                        {% for image in crochetPattern.image %}
+                            <div><img src="{{ asset(image) }}" alt="Image de patron" style="max-width: 100px;"/></div>
+                        {% else %}
+                            <div>Aucune image disponible</div>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+	<a href="{{ path('app_portfolio_show', { 'id': portfolio.id}) }}">back to portfolio</a>
+    
+{% endblock %} {# body #} 

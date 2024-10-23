@@ -78,4 +78,23 @@ final class PortfolioController extends AbstractController
 
         return $this->redirectToRoute('app_portfolio_index', [], Response::HTTP_SEE_OTHER);
     }
+    
+    /**
+     * Show a Crochet Pattern in the portfolio.
+     *
+     * @param int $id
+     *
+     * Dans cette partie, j'utilise twig.
+     */
+    
+    #[Route('/crochet/pattern/{id}', name: 'app_portfolio_crochet_pattern_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function CrochetPatternShow(ManagerRegistry $doctrine, $id): Response
+    {
+        $crochetPatternRepo = $doctrine->getRepository(CrochetPattern::class);
+        $crochetPattern = $crochetPatternRepo->find($id);
+        
+        return $this->render("crochet_pattern/show.html.twig", [
+            'crochetPattern' => $crochetPattern
+        ]);
+    }
 }

@@ -4,15 +4,37 @@ namespace App\DataFixtures;
 
 use App\Entity\patternCollection;
 use App\Entity\CrochetPattern;
+use App\Entity\Portfolio;
+use App\Entity\Member;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\Member;
 
 
 class AppFixtures extends Fixture
 {
-    // définit les noms des collections avec références
+    //définit les références des noms de patrons de crochet
+    private const PATTERN_LAPIN_DOUX = 'pattern-lapin-doux';
+    private const PATTERN_OURS_CÂLIN = 'pattern-ours-calin';
+    private const PATTERN_CHIEN_MIGNON = 'pattern-chien-mignon';
+    
+    private const PATTERN_TOP_ROUGE_TROUE = 'pattern-top-rouge-troue';
+    private const PATTERN_TOP_BARIOLE = 'pattern-top-bariole';
+    private const PATTERN_TOP_OCEAN = 'pattern-top-ocean';
+    
+    private const PATTERN_ECHARPE_ARC_EN_CIEL = 'pattern-echarpe-arc-en-ciel';
+    private const PATTERN_ECHARPE_NEIGE = 'pattern-echarpe-neige';
+    private const PATTERN_ECHARPE_FORET = 'pattern-echarpe-foret';
+    
+    private const PATTERN_BONNET_CHAUD = 'pattern-bonnet-chaud';
+    private const PATTERN_MITAINES_DOUCES = 'pattern-mitaines-douces';
+    
+    private const PATTERN_OEUF_AU_PLAT = 'pattern-oeuf-au-plat';
+    private const PATTERN_COQUILLAGES_CRUSTACES = 'pattern-coquillages-crustaces';
+    private const PATTERN_POIVRONS = 'pattern-poivrons';
+    private const PATTERN_PANIER_FRUITS = 'pattern-panier-fruits';
+    
+    // définit les références des noms des collections
     private const COLLECTION_DOUX = 'collection-doudous-tout-doux';
     private const COLLECTION_CROP_TOPS = 'collection-crop-tops-d-ete';
     private const COLLECTION_ECHARPES = 'collection-echarpes-d-hiver';
@@ -26,7 +48,10 @@ class AppFixtures extends Fixture
     private const COLLECTION_MONSTRES = 'collection-monstres-rigolos';
     private const COLLECTION_DECORATIONS_NOEL = 'collection-decorations-de-noel';
     
-
+    // définit les références des noms des portfolios
+    private const PORTFOLIO_ALIZEE = 'portfolio-alizee';
+    private const PORTFOLIO_ZELIA = 'portfolio-zelia';
+    
     /**
      * Charge les collections.
      */
@@ -55,7 +80,7 @@ class AppFixtures extends Fixture
         // patternCollection = [id, name, designer, dateCreated, totalPatterns, reference]
         yield [1, 'Doudous tout doux', 'Zelia', new \DateTime('2022-01-01'), 3, self::COLLECTION_DOUX];
         
-        yield [2, 'Crop tops d\'été', 'Tricotteuse', new \DateTime('2023-02-01'), 3, self::COLLECTION_CROP_TOPS];
+        yield [2, 'Crop tops d\'été', 'Alizée', new \DateTime('2023-02-01'), 3, self::COLLECTION_CROP_TOPS];
         
         yield [3, 'Écharpes d\'hiver', 'CrochetLover', new \DateTime('2023-03-01'), 3, self::COLLECTION_ECHARPES];
         
@@ -84,7 +109,7 @@ class AppFixtures extends Fixture
     
     private function loadCrochetPatterns(ObjectManager $manager)
     {
-        foreach ($this->getCrochetPatternsData() as [$reference, $name, $hookSize, $category, $language, $image, $designer]) {
+        foreach ($this->getCrochetPatterns() as [$reference, $name, $hookSize, $category, $language, $image, $designer]) {
             $crochetPattern = new CrochetPattern();
             $patternCollection = $this->getReference($reference);
             $crochetPattern->setName($name);
@@ -100,12 +125,11 @@ class AppFixtures extends Fixture
         }
      }
 
+    /**
+     * Données de CrochetPatterns.
+     */
     
-        /**
-         * Données de CrochetPatterns.
-         */
-    
-    private function getCrochetPatternsData()
+    private function getCrochetPatterns()
     {
         // Pattern = [name, hook size, category, language, image, designer]
         yield [self::COLLECTION_DOUX, 'Lapin Doux', 3.5, 'Jouets', 'Français', ['https://i.pinimg.com/1200x/f0/6c/dc/f06cdc3b0c857f0fd8a9e02936318880.jpg'], 'Zelia'];
@@ -130,6 +154,35 @@ class AppFixtures extends Fixture
     }
     
     /**
+     * Charge les Portfolios.
+     */
+    private function loadPortfolios(ObjectManager $manager)
+    {
+        foreach ($this->getPortfolios() as [$name, $designer, $dateCreated, $totalPatterns, $memberReference, $patternsReference]) {
+            $portfolio = new Portfolio();
+            $member = $this->getReference($memberReference);
+            $portfolio->setName($name);
+            $portfolio->setDesigner($designer);
+            $portfolio->setDateCreated($dateCreated);
+            $portfolio->setTotalPatterns($totalPatterns);
+            
+            $member->addPortfolio($portfolio);
+            $manager->persist($portfolio);
+            $manager->flush();
+        }
+    }
+    
+    /**
+     * Données des Portfolios.
+     */
+    private function getPortfolios()
+    {
+        // Portfolio = [name, designer, dateCreated, totalPatterns, memberReference, patternsReference]
+        yield['Portfolio Alizée', 'Alizee', new \DateTime('2024-01-01'), 3, 'alizee@localhost', [self::PATTERN_TOP_ROUGE_TROUE]];
+        yield['Portfolio Zélia', 'Zelia', new \DateTime('2024-02-01'), 2, 'zelia@localhost', [self::PATTERN_LAPIN_DOUX]];
+    }
+    
+    /**
      * Hasher de mots de passe pour les membres.
      */
     
@@ -149,6 +202,7 @@ class AppFixtures extends Fixture
     
     private function membersGenerator()
     {
+        
         yield ['alizee@localhost','123456'];
         yield ['zelia@localhost','123456'];
     }
@@ -157,6 +211,7 @@ class AppFixtures extends Fixture
     {
         $this->loadPatternCollections($manager);
         $this->loadCrochetPatterns($manager);
+        $this->loadPortfolios($manager);
         
         foreach ($this->membersGenerator() as [$email, $plainPassword]) {
             $user = new Member();

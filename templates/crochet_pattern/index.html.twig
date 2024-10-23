@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CrochetPattern index{% endblock %}
+
+{% block body %}
+    <h1>CrochetPattern index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>HookSize</th>
+                <th>Category</th>
+                <th>Language</th>
+                <th>Image</th>
+                <th>Designer</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for crochet_pattern in crochet_patterns %}
+            <tr>
+                <td>{{ crochet_pattern.id }}</td>
+                <td>{{ crochet_pattern.Name }}</td>
+                <td>{{ crochet_pattern.HookSize }}</td>
+                <td>{{ crochet_pattern.Category }}</td>
+                <td>{{ crochet_pattern.Language }}</td>
+                <td>{{ crochet_pattern.Image ? crochet_pattern.Image|join(', ') : '' }}</td>
+                <td>{{ crochet_pattern.Designer }}</td>
+                <td>
+                    <a href="{{ path('app_crochet_pattern_show', {'id': crochet_pattern.id}) }}">show</a>
+                    <a href="{{ path('app_crochet_pattern_edit', {'id': crochet_pattern.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_crochet_pattern_new') }}">Create new</a>
+{% endblock %}
