@@ -3,5 +3,8 @@ bootstrap_menu:
     main:
       items:
         collections:
-          label: 'Liste des collections'
-          route: 'app_pattern_collection_list'
+          label: 'Patrons de crochet'
+          route: 'app_crochet_pattern_index'
+        portfolios publics:
+          label: 'Portfolios public'
+          route: 'app_portfolio_index'

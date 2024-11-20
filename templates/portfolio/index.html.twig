@@ -1,19 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Portfolio index{% endblock %}
+{% block title %}Liste des portfolios publics{% endblock %}
 
 {% block body %}
-    <h1>Portfolio index</h1>
+    <h1>Liste des portfolios publics:</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Nom</th>
-                <th>Créateur</th>
                 <th>Date de création</th>
                 <th>Nombre de Patrons</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,17 +20,17 @@
             <tr>
                 <td>{{ portfolio.id }}</td>
                 <td>{{ portfolio.name }}</td>
-                <td>{{ portfolio.designer }}</td>
                 <td>{{ portfolio.dateCreated ? portfolio.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ portfolio.totalPatterns }}</td>
                 <td>
-                    <a href="{{ path('app_portfolio_show', {'id': portfolio.id}) }}">show</a>
-                    <a href="{{ path('app_portfolio_edit', {'id': portfolio.id}) }}">edit</a>
+                    <a href="{{ path('app_portfolio_show', {'id': portfolio.id}) }}">voir</a>
+                    <br>
+                    <a href="{{ path('app_portfolio_edit', {'id': portfolio.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">aucun enregistrement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>

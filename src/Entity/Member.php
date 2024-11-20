@@ -6,6 +6,9 @@ use App\Repository\MemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -19,24 +22,18 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'Designer', targetEntity: patternCollection::class)]
     private ?patternCollection $patternCollection = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Member')]
-    private ?Portfolio $Portfolios = null;
-
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: Portfolio::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $portfolios;
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +56,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -69,6 +67,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return list<string>
      */
+    
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -81,6 +80,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param list<string> $roles
      */
+    
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
@@ -91,6 +91,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    
     public function getPassword(): ?string
     {
         return $this->password;
@@ -106,6 +107,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -124,15 +126,47 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPortfolios(): ?Portfolio
+    public function __construct()
     {
-        return $this->Portfolios;
+        $this->portfolios = new ArrayCollection();
+    }
+    
+    public function addPortfolio(Portfolio $portfolio): self
+    {
+        if (!$this->portfolios->contains($portfolio)) {
+            $this->portfolios->add($portfolio);
+            $portfolio->setMember($this);
+        }
+        
+        return $this;
+    }
+    
+    public function removePortfolio(Portfolio $portfolio): self
+    {
+        if ($this->portfolios->removeElement($portfolio)) {
+            if ($portfolio->getMember() === $this) {
+                $portfolio->setMember(null);
+            }
+        }
+        
+        return $this;
+    }
+    
+    public function getPortfolios(): Collection
+    {
+        return $this->portfolios;
     }
 
-    public function setPortfolios(?Portfolio $Portfolios): static
+    public function setPortfolios(Collection $portfolios): self
     {
-        $this->Portfolios = $Portfolios;
-
+        foreach ($portfolios as $portfolio) {
+            $this->addPortfolio($portfolio);
+        }
         return $this;
+    }
+    
+    public function __toString(): string
+    {
+        return $this->email;
     }
 }

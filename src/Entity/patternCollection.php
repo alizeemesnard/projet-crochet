@@ -16,8 +16,8 @@ class patternCollection
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Designer = null;
+    #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'patternCollection')]
+    private ?Member $Designer = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $DateCreated = null;
@@ -41,15 +41,15 @@ class patternCollection
         return $this->id;
     }
 
-    public function getDesigner(): ?string
+    public function getDesigner(): ?Member
     {
         return $this->Designer;
     }
 
-    public function setDesigner(string $Designer): static
+    public function setDesigner(?Member $Designer): static
     {
         $this->Designer = $Designer;
-
+        
         return $this;
     }
 
@@ -114,6 +114,11 @@ class patternCollection
         }
         
         return $this;
+    }
+    
+    public function __toString(): string
+    {
+        return $this->Name;
     }
     
 }

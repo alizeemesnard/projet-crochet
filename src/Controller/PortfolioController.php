@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Portfolio;
+use App\Entity\CrochetPattern;
 use App\Form\PortfolioType;
 use App\Repository\PortfolioRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+
 
 #[Route('/portfolio')]
 final class PortfolioController extends AbstractController
@@ -87,14 +90,25 @@ final class PortfolioController extends AbstractController
      * Dans cette partie, j'utilise twig.
      */
     
-    #[Route('/crochet/pattern/{id}', name: 'app_portfolio_crochet_pattern_show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function CrochetPatternShow(ManagerRegistry $doctrine, $id): Response
-    {
-        $crochetPatternRepo = $doctrine->getRepository(CrochetPattern::class);
-        $crochetPattern = $crochetPatternRepo->find($id);
+    #[Route('/{portfolio_id}/crochet/pattern/{pattern_id}', methods: ['GET'], name: 'app_portfolio_crochet_pattern_show')]
+    public function CrochetPatternShow(
+        #[MapEntity(id: 'portfolio_id')]
+        Portfolio $portfolio,
+        #[MapEntity(id: 'pattern_id')]
+        CrochetPattern $CrochetPattern): Response
         
-        return $this->render("crochet_pattern/show.html.twig", [
-            'crochetPattern' => $crochetPattern
-        ]);
+        {
+            if(! $portfolio->getPatterns()->contains($CrochetPattern)) {
+                throw $this->createNotFoundException("ERROR 404: Je n'ai pas pu trouver de patron dans ce portfolio !");
+            }
+            
+            //if(! $portfolio->isPublished()) {
+            //    throw $this->createAccessDeniedException("ERROR 403: Vous ne pouvez pas accéder à la ressource demandée !");
+            //} 
+            
+            return $this->render('portfolio/CrochetPatternShow.html.twig', [
+                'CrochetPattern' => $CrochetPattern,
+                'Portfolio' => $portfolio
+            ]);
     }
 }

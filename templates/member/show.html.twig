@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informations sur {{ member.email }}{% endblock %}
+
+{% block body %}
+    <h1>Détails du Membre : {{ member.email }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ member.email }}</td>
+            </tr>
+            <tr>
+                <th>Rôle</th>
+                <td>{{ member.roles ? member.roles|join(', ') : 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Mot de passe</th>
+                <td>{{ member.password ? '****' : 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Collection de patrons</th>
+                <td>
+                    {% if member.patternCollection %}
+                        <a href="{{ path('app_pattern_collection_show', { 'id': member.patternCollection.id }) }}">
+                            {{ member.patternCollection.name }}
+                        </a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Portfolios</th>
+                <td>
+                    {% if member.portfolios|length > 0 %}
+                        <ul>
+                            {% for portfolio in member.portfolios %}
+                                <li>
+                                    <a href="{{ path('app_portfolio_show', { 'id': portfolio.id }) }}">
+                                        {{ portfolio.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Aucune portfolio disponible
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_member_index') }}">Liste des membres</a>
+        <br>
+        <br>
+    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+
+
+{% endblock %}

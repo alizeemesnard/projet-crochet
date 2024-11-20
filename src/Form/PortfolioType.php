@@ -15,7 +15,7 @@ class PortfolioType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('designer')
+            ->add('member')
             ->add('dateCreated', null, [
                 'widget' => 'single_text',
             ])

@@ -20,10 +20,8 @@ class CrochetPatternType extends AbstractType
             ->add('Category')
             ->add('Language')
             ->add('Image')
-            ->add('Designer')
-            ->add('patternCollection', EntityType::class, [
-                'class' => patternCollection::class,
-                'choice_label' => 'id',
+            ->add('patternCollection', null, [
+                'disabled'   => true,
             ])
             ->add('portfolios', EntityType::class, [
                 'class' => Portfolio::class,

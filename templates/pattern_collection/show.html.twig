@@ -31,7 +31,10 @@
           </tbody>
       </table>
 
-      <a href="{{ path('app_pattern_collection_list') }}">Retour à la liste des collections</a>
+      <a href="{{ path('app_member_show', { 'id': patternCollection.designer.id }) }}"> Retour au membre {{ patternCollection.designer.email }} </a>
+		  <br> <br>
+      <a href="{{ path('app_crochet_pattern_new', {'id': patternCollection.id}) }}">Créer un nouveau patron</a>
+
 
   {% endblock %} {# body #} 
 {# ... #}

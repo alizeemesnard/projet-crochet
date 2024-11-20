@@ -31,9 +31,6 @@ class CrochetPattern
     #[ORM\Column(type: Types::ARRAY)]
     private array $Image = [];
 
-    #[ORM\Column(length: 255)]
-    private ?string $Designer = null;
-
     #[ORM\ManyToOne(inversedBy: 'patterns')]
     private ?patternCollection $patternCollection = null;
 
@@ -110,18 +107,6 @@ class CrochetPattern
     public function setImage(array $Image): static
     {
         $this->Image = $Image;
-
-        return $this;
-    }
-
-    public function getDesigner(): ?string
-    {
-        return $this->Designer;
-    }
-
-    public function setDesigner(string $Designer): static
-    {
-        $this->Designer = $Designer;
 
         return $this;
     }

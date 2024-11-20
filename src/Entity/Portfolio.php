@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Member;
 
 #[ORM\Entity(repositoryClass: PortfolioRepository::class)]
 class Portfolio
@@ -19,30 +20,21 @@ class Portfolio
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $designer = null;
-
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'portfolios', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Member $member = null;
+    
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $totalPatterns = null;
 
-    /**
-     * @var Collection<int, Member>
-     */
-    #[ORM\OneToMany(targetEntity: Member::class, mappedBy: 'Portfolios')]
-    private Collection $Member;
-
-    /**
-     * @var Collection<int, CrochetPattern>
-     */
     #[ORM\ManyToMany(targetEntity: CrochetPattern::class, inversedBy: 'portfolios')]
     private Collection $patterns;
 
     public function __construct()
     {
-        $this->Member = new ArrayCollection();
         $this->patterns = new ArrayCollection();
     }
 
@@ -59,18 +51,6 @@ class Portfolio
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDesigner(): ?string
-    {
-        return $this->designer;
-    }
-
-    public function setDesigner(?string $designer): static
-    {
-        $this->designer = $designer;
 
         return $this;
     }
@@ -102,30 +82,20 @@ class Portfolio
     /**
      * @return Collection<int, Member>
      */
-    public function getMember(): Collection
+    
+    public function getMember(): ?Member
     {
-        return $this->Member;
+        return $this->member;
     }
 
-    public function addMember(Member $member): static
+    public function setMember(?Member $member): self
     {
-        if (!$this->Member->contains($member)) {
-            $this->Member->add($member);
-            $member->setPortfolios($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMember(Member $member): static
-    {
-        if ($this->Member->removeElement($member)) {
-            // set the owning side to null (unless already changed)
-            if ($member->getPortfolios() === $this) {
-                $member->setPortfolios(null);
+        if ($this->member !== $member) {
+            $this->member = $member;
+            if ($member !== null && !$member->getPortfolios()->contains($this)) {
+                $member->addPortfolio($this);
             }
         }
-
         return $this;
     }
 

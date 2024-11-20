@@ -3,44 +3,40 @@
 {% block title %}CrochetPattern{% endblock %}
 
 {% block body %}
-    <h1>CrochetPattern</h1>
+    <h1>{{ crochet_pattern.Name }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ crochet_pattern.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ crochet_pattern.Name }}</td>
-            </tr>
-            <tr>
-                <th>HookSize</th>
+                <th>Taille du crochet</th>
                 <td>{{ crochet_pattern.HookSize }}</td>
             </tr>
             <tr>
-                <th>Category</th>
+                <th>Catégorie</th>
                 <td>{{ crochet_pattern.Category }}</td>
             </tr>
             <tr>
-                <th>Language</th>
+                <th>Langue</th>
                 <td>{{ crochet_pattern.Language }}</td>
             </tr>
             <tr>
-                <th>Image</th>
-                <td>{{ crochet_pattern.Image ? crochet_pattern.Image|join(', ') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Designer</th>
-                <td>{{ crochet_pattern.Designer }}</td>
+                <th>Images</th>
+                <td>
+                    <ul>
+                        {% for image in crochet_pattern.image %}
+                            <div><img src="{{ asset(image) }}" alt="Image de patron" style="max-width: 100px;"/></div>
+                        {% else %}
+                            <div>Aucune image disponible</div>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_crochet_pattern_index') }}">back to list</a>
-
-    <a href="{{ path('app_crochet_pattern_edit', {'id': crochet_pattern.id}) }}">edit</a>
-
+	<a href="{{ path('app_pattern_collection_show', {'id': crochet_pattern.patternCollection.id}) }}">Retour à la collection de patrons</a>
+	<br> <br>
+    <a href="{{ path('app_crochet_pattern_edit', {'id': crochet_pattern.id}) }}">Editer le patron</a>
+    <br> <br>
     {{ include('crochet_pattern/_delete_form.html.twig') }}
 {% endblock %}

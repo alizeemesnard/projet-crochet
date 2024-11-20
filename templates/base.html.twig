@@ -1,46 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" /
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <!-- Favicon-->
+        <meta name="description" content="Site de l'Atelier de Zélia" />
+        <meta name="author" content="L'Atelier de Zélia" />
+        <title>{% block title %}Bienvenue!{% endblock %}</title>
+
+        <!-- Favicon -->
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
         {% block stylesheets %}
-        <!-- Bootstrap icons-->
-              <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-			<link href="{{ asset('css/styles.css') }}" rel="stylesheet"> 
-        {% endblock %}{# stylesheets #}
+        <!-- Google Fonts (police Poppins pour un look moderne et élégant) -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+        <!-- Core theme CSS (inclut Bootstrap) -->
+        <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+
+        <style>
+            /* Thème rose clair */
+            body {
+                background-color: #ffe6f2;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh; /* Cela garantit que le footer est toujours au bas de la page */
+                font-family: 'Poppins', sans-serif; /* Applique la police Poppins */
+            }
+            .navbar {
+                background-color: #ffccda;
+            }
+            .navbar a.navbar-brand, 
+            .navbar-nav .nav-link {
+                color: #b3005e !important;
+            }
+            .navbar a.navbar-brand:hover, 
+            .navbar-nav .nav-link:hover {
+                color: #800040 !important;
+            }
+
+            /* Style pour le titre */
+            .navbar .navbar-brand {
+                font-family: 'Poppins', sans-serif; /* Applique la police Poppins */
+                font-weight: bold; /* Texte en gras */
+                font-size: 1.2em; /* Taille de la police */
+                text-decoration: none; /* Annuler le soulignement au survol */
+            }
+
+            /* Style de l'icône ♡ dans le titre */
+            .navbar .navbar-brand .heart-icon {
+                font-size: 1em; /* Taille de l'icône ♡ */
+                color: #b3005e; /* Couleur de l'icône */
+            }
+
+            /* Ajoute un espace entre la barre de navigation et le contenu */
+            .container {
+                margin-top: 30px; /* Ajouter une marge de 30px (vous pouvez ajuster cette valeur) */
+            }
+
+            /* Couleur par défaut des liens */
+            a {
+                color: #8a2be2; /* Liens violets */
+            }
+
+            /* Changer la couleur au survol des liens */
+            a:hover {
+                color: #6a1d9c; /* Couleur violette plus foncée au survol */
+                text-decoration: underline; /* Souligner les liens au survol */
+            }
+
+            /* Footer Style */
+            footer {
+                background-color: #ffccda; /* Fond rose clair */
+                color: #b3005e; /* Texte de couleur rose foncé */
+                text-align: center;
+                padding: 20px 0;
+                margin-top: auto; /* Pousse le footer en bas */
+                font-size: 0.5em;
+            }
+            
+            footer a {
+                color: #8a2be2; /* Couleur violette pour les liens dans le footer */
+            }
+           
+            footer a:hover {
+                color: #6a1d9c; /* Violet plus foncé au survol */
+                text-decoration: underline; /* Souligner les liens au survol */
+            }
+
+            /* Style spécifique pour le lien Mon Compte */
+            .navbar-nav .nav-item.mon-compte {
+                margin-left: auto; /* Aligne Mon Compte à droite */
+            }
+
+            /* Style pour les listes à puces */
+            ul {
+                list-style-type: none; /* Enlève les puces classiques */
+                padding-left: 0;
+            }
+
+            /* Étoiles pour les listes classiques */
+            ul:not(.navbar-nav) li::before {
+                content: "★"; /* Utilise l'étoile Unicode comme puce */
+                margin-right: 10px; /* Espace entre la puce et le texte */
+                font-size: 0.8em; /* Taille de l'étoile */
+                color: #8a2be2; /* Violet */
+            }
+            /* Style pour les boutons */
+            .btn {
+                background-color: #8a2be2; /* Couleur violette des boutons */
+                border-color: #8a2be2; /* Couleur de la bordure violette */
+                color: white; /* Texte blanc sur les boutons */
+            }
+            
+        </style>
+        {% endblock %}
     </head>
     <body>
-	    {% block menu %}
-	     <!-- Navigation -->
-	        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	            <div class="container px-4 px-lg-5">
-	                <a class="navbar-brand" href="{{ path('app_pattern_collection_list') }}">Liste des collections</a>
-	                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-	                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-	                      {{ render_bootstrap_menu('main') }}
-	                    </ul>
-	                </div>
-	            </div>
-	        </nav>
-	    {% endblock %}{# menu #}
-	     
-        {% block body %}
-        {% endblock %}{# body #}
+        {% block menu %}
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container px-4 px-lg-5">
+                <!-- Titre avec icône coeur -->
+                <a class="navbar-brand">
+                    <span class="heart-icon">♡</span>
+                    Projet-Crochet
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Basculer la navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <!-- Menu dynamique -->
+                        {{ render_bootstrap_menu('main') }}
+                    </ul>
+                    <!-- Vérifie si un utilisateur est connecté -->
+                    <ul class="navbar-nav ms-auto">  <!-- Aligner le lien "Mon Compte" à droite -->
+                        {% if app.user %}
+                            <!-- Lien vers le profil du membre -->
+                            <li class="nav-item mon-compte">
+                                <a class="nav-link" href="{{ path('app_member_show', {'id': app.user.id}) }}">Mon Compte</a>
+                            </li>
+                            <!-- Bouton de déconnexion -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                            </li>
+                        {% else %}
+                            <!-- Lien vers la page de connexion si l'utilisateur n'est pas connecté -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% endblock %}
+
+        <div class="container">
+            {% block body %}
+            <!-- Le contenu de chaque page sera ici -->
+            {% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>
+                <strong>Projet-Crochet</strong> est une application dédiée aux passionnés de crochet, permettant aux utilisateurs de gérer leur collection de modèles de crochet. Les membres peuvent créer des fiches détaillées pour chaque patron, gérer leur collection de patrons, et partager certains modèles avec la communauté via des galeries.
+            </p>
+            <p>
+                Pour plus d'informations ou des questions, contactez-nous par email à <a href="mailto:contact@projet-crochet.com">contact@projet-crochet.com</a><br>
+                Ou appelez le Père Noël au : <strong>3630</strong>
+            </p>
+        </footer>
 
         {% block javascripts %}
-          <!-- Bootstrap core JS-->
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-          <!-- Core theme JS-->
-          <script src="{{ asset('js/scripts.js') }}"></script>
-        {% endblock %} {# javascripts #}
-        
+        <!-- Bootstrap core JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core theme JS -->
+        <script src="{{ asset('js/scripts.js') }}"></script>
+        {% endblock %}
     </body>
 </html>
